@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor binario</title>
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #172033;
+            background: #f3f5f8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+        }
+
+        main {
+            width: min(680px, 100%);
+            background: white;
+            border-radius: 14px;
+            padding: 32px;
+            box-shadow: 0 8px 30px rgba(20, 30, 50, 0.10);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .descripcion {
+            margin-top: 0;
+            color: #596579;
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+            margin-top: 26px;
+        }
+
+        label {
+            display: block;
+            font-weight: 650;
+            margin-bottom: 7px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #c8ced8;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+            background: #172033;
+            color: white;
+            font-weight: 700;
+        }
+
+        button:hover {
+            opacity: 0.92;
+        }
+
+        .errores {
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: #fff1f1;
+            border: 1px solid #e5aaaa;
+            color: #8d1f1f;
+        }
+
+        .resultado {
+            margin-top: 24px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f0f6ff;
+            border: 1px solid #c9ddf7;
+        }
+
+        .resultado p {
+            margin: 7px 0;
+        }
+
+        code {
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Conversor binario</h1>
+    <p class="descripcion">
+        Convierte un número binario a decimal u octal mediante algoritmos
+        implementados manualmente.
+    </p>
+
+    {% if form.errors %}
+        <div class="errores">
+            <strong>Corrige los siguientes errores:</strong>
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p>{{ field.label }}: {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            {{ form.numero_binario.label_tag }}
+            {{ form.numero_binario }}
+        </div>
+
+        <div>
+            {{ form.tipo_conversion.label_tag }}
+            {{ form.tipo_conversion }}
+        </div>
+
+        <button type="submit">Convertir</button>
+    </form>
+
+    {% if datos_resultado %}
+        <section class="resultado">
+            <h2>Resultado</h2>
+            <p><strong>Número original:</strong> <code>{{ datos_resultado.numero }}</code></p>
+            <p><strong>Conversión:</strong> {{ datos_resultado.tipo }}</p>
+            <p><strong>Resultado:</strong> <code>{{ datos_resultado.resultado }}</code></p>
+            <p><strong>Cantidad de dígitos:</strong> {{ datos_resultado.numero|length }}</p>
+        </section>
+    {% endif %}
+</main>
+</body>
+</html>
